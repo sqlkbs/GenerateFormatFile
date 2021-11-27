@@ -9,7 +9,7 @@
       <Value Profile="(Default)">localhost</Value>
     </Setting>
     <Setting Name="loadToSQL" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="username" Type="System.String" Scope="User">
       <Value Profile="(Default)">Qudios</Value>

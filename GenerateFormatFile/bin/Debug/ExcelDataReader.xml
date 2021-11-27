@@ -58,11 +58,22 @@
         </member>
         <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffBlankCell.XFormat">
             <summary>
-            Gets the format used for this cell. If BIFF2 and this value is 63, this record was preceded by an IXFE record containing the actual XFormat >= 63.
+            Gets the extended format used for this cell. If BIFF2 and this value is 63, this record was preceded by an IXFE record containing the actual XFormat >= 63.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffBlankCell.Format">
+            <summary>
+            Gets the number format used for this cell. Only used in BIFF2 without XF records. Used by Excel 2.0/2.1 instead of XF/IXFE records.
             </summary>
         </member>
         <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffBlankCell.IsCell">
             <inheritdoc />
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffBlankCell.IsBiff2Cell">
+            <summary>
+            Gets a value indicating whether the cell's record identifier is BIFF2-specific. 
+            The shared binary layout of BIFF2 cells are different from BIFF3+.
+            </summary>
         </member>
         <member name="T:ExcelDataReader.Core.BinaryFormat.XlsBiffBOF">
             <summary>
@@ -779,14 +790,63 @@
             Gets the worksheet data offset.
             </summary>
         </member>
+        <member name="M:ExcelDataReader.Core.BinaryFormat.XlsWorksheet.GetBlockSize(System.Int32,System.Int32@,System.Int32@,System.Int32@)">
+            <summary>
+            Find how many rows to read at a time and their offset in the file.
+            If rows are stored sequentially in the file, returns a block size of up to 32 rows.
+            If rows are stored non-sequentially, the block size may extend up to the entire worksheet stream
+            </summary>
+        </member>
         <member name="M:ExcelDataReader.Core.BinaryFormat.XlsWorksheet.ReadSingleCell(ExcelDataReader.Core.BinaryFormat.XlsBiffStream,ExcelDataReader.Core.BinaryFormat.XlsBiffBlankCell,System.Int32)">
             <summary>
             Reads additional records if needed: a string record might follow a formula result
             </summary>
         </member>
+        <member name="M:ExcelDataReader.Core.BinaryFormat.XlsWorksheet.GetFormatIndexForCell(ExcelDataReader.Core.BinaryFormat.XlsBiffBlankCell,ExcelDataReader.Core.BinaryFormat.XlsBiffRecord)">
+            <summary>
+            Returns an index into Workbook.Formats for the given cell and preceding ixfe record.
+            </summary>
+        </member>
         <member name="P:ExcelDataReader.Core.Cell.ColumnIndex">
             <summary>
             Gets or sets the zero-based column index.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.CommonWorkbook">
+            <summary>
+            Common handling of extended formats (XF) and mappings between file-based and global number format indices.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CommonWorkbook.Formats">
+            <summary>
+            Gets the dictionary of global number format strings. Always includes the built-in formats at their
+            corresponding indices and any additional formats specified in the workbook file.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CommonWorkbook.FormatMappings">
+            <summary>
+            Gets the the dictionary of mappings between format index in the file and key in the Formats dictionary.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.CommonWorkbook.GetNumberFormatFromXF(System.Int32)">
+            <summary>
+            Returns the global number format index from an XF index.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.CommonWorkbook.GetNumberFormatFromFileIndex(System.Int32)">
+            <summary>
+            Returns the global number format index from a file-based format index.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.CommonWorkbook.AddNumberFormat(System.Int32,System.String)">
+            <summary>
+            Registers a number format string and its file-based format index in the workbook's Formats dictionary.
+            If the format string matches a built-in or previously registered format, it will be mapped to that index.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.CommonWorkbook.AddExtendedFormat(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Registers an extended format and its file based number format index.
             </summary>
         </member>
         <member name="T:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry">
@@ -869,19 +929,9 @@
             Gets or sets the prop type. Reserved, must be 0.
             </summary>
         </member>
-        <member name="M:ExcelDataReader.Core.CompoundFormat.CompoundDocument.CreateStream(System.IO.Stream,System.UInt32,System.Int32,System.Boolean)">
-            <summary>
-            Creates a Stream instance to read from the compound document.
-            </summary>
-        </member>
         <member name="M:ExcelDataReader.Core.CompoundFormat.CompoundDocument.ReadStream(System.IO.Stream,System.UInt32,System.Int32,System.Boolean)">
             <summary>
             Reads bytes from a regular or mini stream.
-            </summary>
-        </member>
-        <member name="M:ExcelDataReader.Core.CompoundFormat.CompoundDocument.ReadMiniStream(System.IO.Stream,System.UInt32,System.Int32)">
-            <summary>
-            Reads bytes from the mini stream stored inside the Root Entry's stream.
             </summary>
         </member>
         <member name="M:ExcelDataReader.Core.CompoundFormat.CompoundDocument.ReadDifSectorChain(System.IO.BinaryReader)">
@@ -995,7 +1045,7 @@
             Gets or sets the first 109 locations in the DIF sector chain
             </summary>
         </member>
-        <member name="M:ExcelDataReader.Core.CsvFormat.CsvAnalyzer.Analyze(System.IO.Stream,System.Char[],System.Text.Encoding,System.Int32@,System.Char@,System.Text.Encoding@,System.Int32@,System.Int32@)">
+        <member name="M:ExcelDataReader.Core.CsvFormat.CsvAnalyzer.Analyze(System.IO.Stream,System.Char[],System.Text.Encoding,System.Int32,System.Int32@,System.Char@,System.Text.Encoding@,System.Int32@,System.Int32@)">
             <summary>
             Reads completely through a CSV stream to determine encoding, separator, field count and row count. 
             Uses fallbackEncoding if there is no BOM. Throws DecoderFallbackException if there are invalid characters in the stream.
@@ -1264,6 +1314,18 @@
             Gets or sets an array of CSV separator candidates. The reader autodetects which best fits the input data. Default: , ; TAB | # (CSV only)
             </summary>
         </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.LeaveOpen">
+            <summary>
+            Gets or sets a value indicating whether to leave the stream open after the IExcelDataReader object is disposed. Default: false
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.AnalyzeInitialCsvRows">
+            <summary>
+            Gets or sets a value indicating the number of rows to analyze for encoding, separator and field count in a CSV.
+            When set, this option causes the IExcelDataReader.RowCount property to throw an exception.
+            Default: 0 - analyzes the entire file (CSV only, has no effect on other formats)
+            </summary>
+        </member>
         <member name="T:ExcelDataReader.ExcelReaderFactory">
             <summary>
             The ExcelReader Factory
@@ -1300,6 +1362,24 @@
             <param name="fileStream">The file stream.</param>
             <param name="configuration">The reader configuration -or- <see langword="null"/> to use the default configuration.</param>
             <returns>The excel data reader.</returns>
+        </member>
+        <member name="T:ExcelDataReader.Exceptions.CompoundDocumentException">
+            <summary>
+            Thrown when there is a problem parsing the Compound Document container format used by XLS and password-protected XLSX.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.CompoundDocumentException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.CompoundDocumentException"/> class.
+            </summary>
+            <param name="message">The error message</param>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.CompoundDocumentException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.CompoundDocumentException"/> class.
+            </summary>
+            <param name="message">The error message</param>
+            <param name="inner">The inner exception</param>
         </member>
         <member name="T:ExcelDataReader.Exceptions.ExcelReaderException">
             <summary>
@@ -1473,6 +1553,20 @@
             </summary>
             <param name="i">The index of the field to find.</param>
             <returns>The number format string of the specified field.</returns>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.GetNumberFormatIndex(System.Int32)">
+            <summary>
+            Gets the number format index for the specified field -or- -1 if there is no value.
+            </summary>
+            <param name="i">The index of the field to find.</param>
+            <returns>The number format index of the specified field.</returns>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.GetColumnWidth(System.Int32)">
+            <summary>
+            Gets the width the specified column.
+            </summary>
+            <param name="i">The index of the column to find.</param>
+            <returns>The width of the specified column.</returns>
         </member>
         <member name="T:ExcelDataReader.Log.ILog">
             <summary>
