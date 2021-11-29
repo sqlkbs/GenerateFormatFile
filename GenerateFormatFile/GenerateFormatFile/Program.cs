@@ -33,13 +33,13 @@ namespace GenerateFormatFile
             {
                 {"f|path=", "(needed) The filename/folderpath of the file or folder to be processed", (string v)=>file=v },
                 {"d|delimiter=", "(needed) Defines the delimiter for the fiels", (string v)=>delimiter=v },
-                {"n|normalize:", "(optional) Normalize file if rows have different number of delimiters", (bool v)=>normalize = v != null },
+                {"n|normalize", "(optional) Normalize file if rows have different number of delimiters", v=>normalize = v != null },
                 {"h|headerrow=", "(optional) The header row, default is 1", v=>headerrow = Int32.Parse(v) },
-                {"a|autoheader:", "(optional) When set to TRUE, normalize file will ignore any header row specified and evaluate all rows to determine the max number of columns. Default is FALSE.", (bool v)=>autoheader = v != null},
-                {"g|genericcolumnname:", "(optional) Use generic column name, like C1,C2 etc. Useful when the headerrow value is not the desired column names. Default is FALSE", (bool v)=>genericcolumnname = v != null},
-                {"r|removeoriginalfile:", "(optional) When processing Excel file, after convert the Excel file to CSV, also delete the original Excel file. Default is FALSE.", (bool v)=>removeoriginalfile = v != null },
+                {"a|autoheader", "(optional) When set to TRUE, normalize file will ignore any header row specified and evaluate all rows to determine the max number of columns. Default is FALSE.", v=>autoheader = v != null},
+                {"g|genericcolumnname", "(optional) Use generic column name, like C1,C2 etc. Useful when the headerrow value is not the desired column names. Default is FALSE", v=>genericcolumnname = v != null},
+                {"r|removeoriginalfile", "(optional) When processing Excel file, after convert the Excel file to CSV, also delete the original Excel file. Default is FALSE.", v=>removeoriginalfile = v != null },
                 {"sf|suffix=", "(optional) When normalize file, keep original file as is and create a new file with the suffix appended to the file name. Default is overwrite existing one.", (string v)=>suffix=v},
-                {"l|loadtoSQL:", "(optional) The filename/folderpath of the file or folder to be processed. Default is FALSE", (bool v)=>LoadToSQL = v != null },
+                {"l|loadtoSQL", "(optional) The filename/folderpath of the file or folder to be processed. Default is FALSE", v=>LoadToSQL = v != null },
                 {"s|servername=", "(optional) SQL Server instance name, when used with option -l.", (string v)=>servername=v },
                 {"u|username=", "(optional) Username to connect to SQL instance, when used with option -l.", (string v)=>username=v },
                 {"p|password=", "(optional) Password. If not specified, will use Integrated Security for the connection.", (string v)=>password=v },
@@ -91,7 +91,7 @@ namespace GenerateFormatFile
                 GenerateFormatFile.Properties.Settings.Default.username = username;
                 GenerateFormatFile.Properties.Settings.Default.password = password;
                 GenerateFormatFile.Properties.Settings.Default.loadToSQL = LoadToSQL;
-                Console.WriteLine(LoadToSQL);
+
                 if (File.Exists(file))
                 {
                     GenerateXML.HandleFile(file, delimiter, normalize, removeoriginalfile, headerrow, genericcolumnname, suffix, autoheader, tablename, procedurename);
