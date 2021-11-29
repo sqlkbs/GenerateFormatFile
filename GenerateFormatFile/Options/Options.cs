@@ -896,11 +896,11 @@ namespace NDesk.Options {
 
 		private const int OptionWidth = 29;
 
-		public void WriteOptionDescriptions (TextWriter o)
+		public void WriteOptionDescriptions (TextWriter o, int optionCharMaxLength = 1)
 		{
 			foreach (Option p in this) {
 				int written = 0;
-				if (!WriteOptionPrototype (o, p, ref written))
+				if (!WriteOptionPrototype (o, p, ref written, optionCharMaxLength))
 					continue;
 
 				if (written < OptionWidth)
@@ -920,7 +920,7 @@ namespace NDesk.Options {
 			}
 		}
 
-		bool WriteOptionPrototype (TextWriter o, Option p, ref int written)
+		bool WriteOptionPrototype (TextWriter o, Option p, ref int written, int optionCharMaxLength)
 		{
 			string[] names = p.Names;
 
@@ -928,7 +928,7 @@ namespace NDesk.Options {
 			if (i == names.Length)
 				return false;
 
-			if (names [i].Length == 1) {
+			if (names [i].Length <= optionCharMaxLength) {
 				Write (o, ref written, "  -");
 				Write (o, ref written, names [0]);
 			}
