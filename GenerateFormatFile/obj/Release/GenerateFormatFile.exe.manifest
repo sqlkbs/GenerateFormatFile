@@ -66,14 +66,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GenerateFormatFile.exe" size="37888">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GenerateFormatFile.exe" size="38400">
       <assemblyIdentity name="GenerateFormatFile" version="2.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>8EJFme6VljflklVT70Wbg+DxGzQ0LqPkCYBB5qtz67I=</dsig:DigestValue>
+        <dsig:DigestValue>eQnfvn96ra6R4c0b9TzjIautUwYVVvE9xLaQPxqgUvc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

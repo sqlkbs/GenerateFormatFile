@@ -135,23 +135,29 @@ namespace FormatFile.Common
             string[] valuestmp = new string[0];
             int ColumnCount = 0;
 
-            if (normalize && autoheader)
-            {
-                while (reader.Peek() >= 0)
-                {
-                    valuestmp = reader.ReadLine().Replace(@"""", @"").Split(delimiter.ToCharArray()[0]);
-                    if (ColumnCount < valuestmp.Length)
-                    {
-                        values = valuestmp;
-                        ColumnCount = values.Length;
-                    }
-                }
-            }
-            else
+
+            if (!normalize || !autoheader)
             {
                 for (int i = 1; i <= headerrow; i++)
                 {
                     values = reader.ReadLine().Replace(@"""", @"").Split(delimiter.ToCharArray()[0]);
+                }
+            }
+            else
+            {
+                string pattern = "/[^,]|[^(?:!(\".*?\"(,(?!$))?)))]/*,|(\".*?\"(,(?!$))?)";
+
+                while (reader.Peek() >= 0)
+                {
+                    //valuestmp = reader.ReadLine().Replace(@"""", @"").Split(delimiter.ToCharArray()[0]);
+                    valuestmp = Regex.Matches(reader.ReadLine() + ",", pattern).Cast<Match>().Select(m => m.Value).ToArray();
+
+                    if (ColumnCount >= valuestmp.Length)
+                    {
+                        continue;
+                    }
+                    values = valuestmp;
+                    ColumnCount = values.Length;
                 }
             }
 

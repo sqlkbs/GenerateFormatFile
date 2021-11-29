@@ -27,7 +27,6 @@ C:\Developer\GenerateFormatFile\GenerateFormatFile\bin\Release\ExcelDataReader.D
 C:\Developer\GenerateFormatFile\GenerateFormatFile\bin\Release\ExcelDataReader.DataSet.xml
 C:\Developer\GenerateFormatFile\GenerateFormatFile\bin\Release\ICSharpCode.SharpZipLib.pdb
 C:\Developer\GenerateFormatFile\GenerateFormatFile\bin\Release\ICSharpCode.SharpZipLib.xml
-C:\Developer\GenerateFormatFile\GenerateFormatFile\obj\Release\GenerateFormatFile.csproj.AssemblyReference.cache
 C:\Developer\GenerateFormatFile\GenerateFormatFile\obj\Release\GenerateFormatFile.csproj.SuggestedBindingRedirects.cache
 C:\Developer\GenerateFormatFile\GenerateFormatFile\obj\Release\GenerateFormatFile.csproj.CoreCompileInputs.cache
 C:\Developer\GenerateFormatFile\GenerateFormatFile\obj\Release\GenerateFormatFile.exe.manifest
@@ -35,3 +34,4 @@ C:\Developer\GenerateFormatFile\GenerateFormatFile\obj\Release\GenerateFormatFil
 C:\Developer\GenerateFormatFile\GenerateFormatFile\obj\Release\GenerateFormatFile.csproj.CopyComplete
 C:\Developer\GenerateFormatFile\GenerateFormatFile\obj\Release\GenerateFormatFile.exe
 C:\Developer\GenerateFormatFile\GenerateFormatFile\obj\Release\GenerateFormatFile.pdb
+C:\Developer\GenerateFormatFile\GenerateFormatFile\obj\Release\GenerateFormatFile.csproj.AssemblyReference.cache
