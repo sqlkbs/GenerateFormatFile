@@ -145,12 +145,12 @@ namespace FormatFile.Common
             }
             else
             {
-                string pattern = "/[^,]|[^(?:!(\".*?\"(,(?!$))?)))]/*,|(\".*?\"(,(?!$))?)";
+                string pattern = "/[^" + delimiter + "]|[^(?:!(\".*?\"(" + delimiter + "(?!$))?)))]/*" + delimiter + "|(\".*?\"(" + delimiter + "(?!$))?)";
 
                 while (reader.Peek() >= 0)
                 {
                     //valuestmp = reader.ReadLine().Replace(@"""", @"").Split(delimiter.ToCharArray()[0]);
-                    valuestmp = Regex.Matches(reader.ReadLine() + ",", pattern).Cast<Match>().Select(m => m.Value).ToArray();
+                    valuestmp = Regex.Matches(reader.ReadLine() + delimiter, pattern).Cast<Match>().Select(m => m.Value).ToArray();
 
                     if (ColumnCount >= valuestmp.Length)
                     {
